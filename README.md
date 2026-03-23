@@ -1,0 +1,3 @@
+# kevin_rpg_2
+
+The protagonist, Kevin Bradley, famed resident of [REDACTED], play blackjack to take your fem dom fem boyfriend. Noah Buol, out on dates. You have different date tiers depending on the cost, with a randomly selected date per tier. If you bankrupt, you have to watch an ad to get money back. The game will also be spammed with ads to enhance user experience, and to make up for the development costs of this game, as well as our prequel which generated no dollars.
