@@ -21,15 +21,16 @@ body {
 }
 
 .ad-left {
-    width: 250px;
+    width: 150px;
+    height: 100vh;
 }
 
 .ad-top {
-    height: 150px;
+    height: 100px;
 }
 
 .ad-bottom {
-    height: 150px;
+    height: 100px;
 }
 
 .right-side {
