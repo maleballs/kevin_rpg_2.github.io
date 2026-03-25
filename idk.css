@@ -3,42 +3,47 @@
     margin: 0;
     padding: 0;
 }
-
 body {
     overflow: hidden;
     height: 100vh;
 }
-
 .screens {
     display: flex;
+    flex-direction: column;
     height: 100vh;
     background-color: black;
 }
-
 .middle-row {
     display: flex;
     flex: 1;
+    overflow: hidden;
 }
-
+.ad-left-wrap {
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  /* vertically centers the img within the wrap */
+}
 .ad-left {
     width: 150px;
-    height: 100vh;
+    height: calc(100vh - 200px);
+    object-fit: fill;
 }
-
-.ad-top {
-    height: 100px;
-}
-
-.ad-bottom {
-    height: 100px;
-}
-
 .right-side {
     display: flex;
     flex-direction: column;
     flex: 1;
 }
-
+.ad-top {
+    width: 100%;
+    height: 100px;
+    object-fit: fill;
+}
+.ad-bottom {
+    width: 100%;
+    height: 100px;
+    object-fit: fill;
+}
 .game-box {
     display: flex;
     flex: 1;
@@ -46,7 +51,6 @@ body {
     justify-content: center;
     align-items: center;
 }
-
 #kevin_rpg_2 {
     flex: 1;
 }
