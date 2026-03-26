@@ -28,6 +28,7 @@ body {
     width: 150px;
     height: calc(100vh - 200px);
     object-fit: fill;
+    opacity: .8;
 }
 .right-side {
     display: flex;
@@ -38,16 +39,18 @@ body {
     width: 100%;
     height: 100px;
     object-fit: fill;
+    opacity: .8;
 }
 .ad-bottom {
     width: 100%;
     height: 100px;
     object-fit: fill;
+    opacity: .8;
 }
 .game-box {
     display: flex;
     flex: 1;
-    background-color: antiquewhite;
+    background-color: #07133B;
     justify-content: center;
     align-items: center;
 }

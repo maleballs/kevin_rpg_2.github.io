@@ -7,7 +7,7 @@ window.addEventListener('load', function () {
 
     //This is retarded but seems to work
     canvas.width = 1200;
-    canvas.height = 400;
+    canvas.height = 600;
 
     //NPC sprites
     const currnpc = new Image();
@@ -35,7 +35,7 @@ window.addEventListener('load', function () {
             this.width = 200;
             this.height = 500;
             //Update these later, for now just draw on screen. screen size (1200, 400)
-            this.x = 1000;
+            this.x = 1025;
             this.y = 0;
         }
         update(sprite) {
@@ -71,6 +71,10 @@ window.addEventListener('load', function () {
     }
 
     const game = new Game(canvas.width, canvas.height);
+
+    //TODO: first function should be drawing a main menu, when start game button is clicked,
+    //The click listener will call gameloop
+    
 
     //Game loop. maybe we only call this when a click listener is triggered?
     function gameloop() {
