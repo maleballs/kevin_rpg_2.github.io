@@ -26,23 +26,24 @@ body {
 }
 .ad-left {
     width: 150px;
-    height: calc(100vh - 200px);
+    height: calc(100vh - 450px);
     object-fit: fill;
     opacity: .8;
 }
 .right-side {
     display: flex;
     flex-direction: column;
+    align-items: center;
     flex: 1;
 }
 .ad-top {
-    width: 100%;
+    width: 50%;
     height: 100px;
     object-fit: fill;
     opacity: .8;
 }
 .ad-bottom {
-    width: 100%;
+    width: 50%;
     height: 100px;
     object-fit: fill;
     opacity: .8;
@@ -55,5 +56,6 @@ body {
     align-items: center;
 }
 #kevin_rpg_2 {
-    flex: 1;
+    height: 100%;
+    width: 100%;
 }
