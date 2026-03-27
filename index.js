@@ -109,10 +109,7 @@ window.addEventListener('load', function () {
             animFrameId = requestAnimationFrame(loadorder);
         }
 
-        //Runs autoplay even when browsers disable it
-        document.addEventListener('mousemove', () => {
-            loadorder();
-        }, { once: true });
+        loadorder();
 
         function cleanup() {
             cancelAnimationFrame(animFrameId);
