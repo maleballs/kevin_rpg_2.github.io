@@ -85,8 +85,8 @@ window.addEventListener('load', function () {
         let animFrameId;
 
         //set event listener so picture renders after its fully loaded
-        gif.oncanplay = () => {gifLoaded = true;};
-        title.onload = () => {titleLoaded = true;};
+        gif.oncanplay = () => { gifLoaded = true; };
+        title.onload = () => { titleLoaded = true; };
 
 
         title.src = 'assets/title.png';
@@ -100,7 +100,7 @@ window.addEventListener('load', function () {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             if (gifLoaded) {
-                for(let i = 10; i < 1500; i += 250) {
+                for (let i = 10; i < 1500; i += 250) {
                     ctx.drawImage(gif, i, 125);
                 }
             }
@@ -108,8 +108,11 @@ window.addEventListener('load', function () {
 
             animFrameId = requestAnimationFrame(loadorder);
         }
-        title.c
-        loadorder();
+
+        //Runs autoplay even when browsers disable it
+        document.addEventListener('mousemove', () => {
+            loadorder();
+        }, { once: true });
 
         function cleanup() {
             cancelAnimationFrame(animFrameId);
@@ -124,7 +127,7 @@ window.addEventListener('load', function () {
     }
     cleanup = mainmenu();
 
-    window.startgame = function() {
+    window.startgame = function () {
         cleanup();
         gameloop();
     }
