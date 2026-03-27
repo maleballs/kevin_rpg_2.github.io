@@ -13,6 +13,9 @@ window.addEventListener('load', function () {
     const currnpc = new Image();
     currnpc.src = 'assets/woowooweewee.png';
 
+    //For handling main menu change
+    let cleanup;
+
     //Class declaration, add these as you go (oop principles)
     class InputHandler {
 
@@ -72,9 +75,59 @@ window.addEventListener('load', function () {
 
     const game = new Game(canvas.width, canvas.height);
 
-    //TODO: first function should be drawing a main menu, when start game button is clicked,
-    //The click listener will call gameloop
+    function mainmenu() {
+        const title = new Image();
+        const gif = document.createElement('video');
+        //TODO: load dark souls music lmao
 
+        let gifLoaded = false;
+        let titleLoaded = false;
+        let animFrameId;
+
+        //set event listener so picture renders after its fully loaded
+        gif.oncanplay = () => {gifLoaded = true;};
+        title.onload = () => {titleLoaded = true;};
+
+
+        title.src = 'assets/title.png';
+        gif.src = 'assets/erika-kirk-kirk.mp4';
+        gif.autoplay = true;
+        gif.loop = true;
+        gif.muted = true;
+
+        //loads
+        function loadorder() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (gifLoaded) {
+                for(let i = 10; i < 1500; i += 250) {
+                    ctx.drawImage(gif, i, 125);
+                }
+            }
+            if (titleLoaded) ctx.drawImage(title, 200, 0);
+
+            animFrameId = requestAnimationFrame(loadorder);
+        }
+        title.c
+        loadorder();
+
+        function cleanup() {
+            cancelAnimationFrame(animFrameId);
+            gif.pause();
+            gif.src = '';
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let button = document.getElementById('start-button');
+            button.remove();
+        }
+
+        return cleanup
+    }
+    cleanup = mainmenu();
+
+    window.startgame = function() {
+        cleanup();
+        gameloop();
+    }
 
     //Game loop. maybe we only call this when a click listener is triggered?
     function gameloop() {
@@ -84,5 +137,4 @@ window.addEventListener('load', function () {
         //might want to swap this out and execute gameloop during click listeners.
         requestAnimationFrame(gameloop);
     }
-    gameloop();
 });
