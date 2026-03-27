@@ -74,8 +74,8 @@ body {
 
 #start-button {
     position: absolute;
-    left: 450px;
-    top: 612px;
+    left: 250px;
+    top: 400px;
     /*Make other button properties*/
     height: 150px;
     width: 700px;

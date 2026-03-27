@@ -1,48 +1,46 @@
 window.addEventListener('load', function () {
-    //canvas setup
+
+    // --- Canvas Setup ---
     const canvas = document.getElementById('kevin_rpg_2');
-
-    //Drawing context, lets us draw and animate on our canvas element
     const ctx = canvas.getContext('2d');
-
-    //This is retarded but seems to work
     canvas.width = 1550;
     canvas.height = 600;
 
-    //NPC sprites
-    const currnpc = new Image();
-    currnpc.src = 'assets/woowooweewee.png';
+    // --- Asset Loading ---
+    const npcSprite = new Image();
+    const backgroundImage = new Image();
+    backgroundImage.src = 'assets/vegasstrip.jpg';
 
-    //For handling main menu change
+    // Tracks the active cleanup function for the current screen
     let cleanup;
 
-    //Class declaration, add these as you go (oop principles)
-    class InputHandler {
+    // --- Classes ---
 
-    }
-    class Card {
-
-    }
-    class Item {
-
-    }
-    class Date {
-
-    }
     class Background {
-
+        constructor(game) {
+            this.game = game;
+            this.image = null;
+        }
+        update(image) {
+            this.image = image;
+        }
+        draw(context) {
+            if (!this.image) return;
+            context.drawImage(this.image, 0, 0, this.game.width, this.game.height);
+        }
     }
+
     class NPC {
         constructor(game) {
             this.game = game;
             this.width = 200;
             this.height = 400;
-            //Update these later, for now just draw on screen. screen size (1200, 400)
-            this.x = 1375;
+            // Keep NPC within canvas bounds (x + width <= canvas.width)
+            this.x = 1350;
             this.y = 200;
+            this.sprite = null;
         }
         update(sprite) {
-            //Replace the sprite
             this.sprite = sprite;
         }
         draw(context) {
@@ -50,91 +48,98 @@ window.addEventListener('load', function () {
             context.drawImage(this.sprite, this.x, this.y, this.width, this.height);
         }
     }
-    class UI {
-        //May not need this, should display money and handle transactions
-    }
+
     class Game {
-        //All other classes will be encapsulated within this one
         constructor(width, height) {
             this.width = width;
             this.height = height;
-            //calling our other class constructors from game
+            this.background = new Background(this);
             this.npc = new NPC(this);
         }
-        /*Can call all dependent update/draw methods here. 
-        TODO: You MIGHT have to change this since this game
-        Doesnt have animation and wont need a redraw on each pass.
-        */
         update() {
-            this.npc.update(currnpc);
+            this.background.update(backgroundImage);
+            this.npc.update(npcSprite);
         }
         draw(context) {
+            this.background.draw(context);
             this.npc.draw(context);
         }
     }
 
+    // --- Game Instance ---
     const game = new Game(canvas.width, canvas.height);
 
+    // --- Main Menu ---
     function mainmenu() {
         const title = new Image();
-        const gif = document.createElement('video');
-        //TODO: load dark souls music lmao
+        const video = document.createElement('video');
 
-        let gifLoaded = false;
+        let videoLoaded = false;
         let titleLoaded = false;
         let animFrameId;
 
-        //set event listener so picture renders after its fully loaded
-        gif.oncanplay = () => { gifLoaded = true; };
+        video.oncanplay = () => { videoLoaded = true; };
         title.onload = () => { titleLoaded = true; };
 
-
         title.src = 'assets/title.png';
-        gif.src = 'assets/erika-kirk-kirk.mp4';
-        gif.autoplay = true;
-        gif.loop = true;
-        gif.muted = true;
+        video.src = 'assets/erika-kirk-kirk.mp4';
+        video.autoplay = true;
+        video.loop = true;
+        video.muted = true;
 
-        //loads
-        function loadorder() {
+        // Autoplay may be blocked; retry on first user interaction
+        video.play().catch(() => {
+            const retry = () => video.play();
+            document.addEventListener('mousemove', retry, { once: true });
+            document.addEventListener('touchstart', retry, { once: true });
+        });
+
+        function render() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            if (gifLoaded) {
-                for (let i = 10; i < 1500; i += 250) {
-                    ctx.drawImage(gif, i, 125);
+            if (videoLoaded) {
+                for (let x = 10; x < 1500; x += 250) {
+                    ctx.drawImage(video, x, 125);
                 }
             }
-            if (titleLoaded) ctx.drawImage(title, 200, 0);
+            if (titleLoaded) {
+                ctx.drawImage(title, 200, 0);
+            }
 
-            animFrameId = requestAnimationFrame(loadorder);
+            animFrameId = requestAnimationFrame(render);
         }
 
-        loadorder();
+        // Create and insert the start button
+        const button = document.getElementById('start-button');
+        button.textContent = 'Start Game';
+        button.onclick = () => window.startgame();
+        canvas.parentElement.appendChild(button);
 
-        function cleanup() {
+        render();
+
+        return function cleanup() {
             cancelAnimationFrame(animFrameId);
-            gif.pause();
-            gif.src = '';
+            video.pause();
+            video.src = '';
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            let button = document.getElementById('start-button');
             button.remove();
-        }
-
-        return cleanup
+        };
     }
+
     cleanup = mainmenu();
 
+    // --- Game Loop ---
+    function gameloop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        game.update();
+        game.draw(ctx);
+        requestAnimationFrame(gameloop);
+    }
+
+    // Exposed globally so the start button can trigger it
     window.startgame = function () {
         cleanup();
         gameloop();
-    }
+    };
 
-    //Game loop. maybe we only call this when a click listener is triggered?
-    function gameloop() {
-        //Again these MAY IN FACT NOT BE NECESSARY!
-        game.update();
-        game.draw(ctx);
-        //might want to swap this out and execute gameloop during click listeners.
-        requestAnimationFrame(gameloop);
-    }
 });
