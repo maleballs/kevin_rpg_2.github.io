@@ -6,15 +6,32 @@ window.addEventListener('load', function () {
     canvas.width = 1550;
     canvas.height = 600;
 
-    // --- Asset Loading ---
+    // --- Asset Loading/Instance variables ---
     const npcSprite = new Image();
     const backgroundImage = new Image();
+    const dialogueBox = document.getElementById('dialogue-box');
+    const dialogueText = dialogueBox.querySelector('p');
+
+    var dialogue = "Welcome to Kevin RPG 2!";
     backgroundImage.src = 'assets/vegasstrip.jpg';
 
     // Tracks the active cleanup function for the current screen
     let cleanup;
 
     // --- Classes ---
+    class UI {
+        constructor(game) {
+            this.game = game;
+            this.dialogueText = dialogueText;
+        }
+        update(text) {
+            this.dialogueText.textContent = text;
+        }
+        draw(context) {
+            if (!this.image) return;
+            context.drawImage(this.dialogueBox, 0, 500, this.game.width, 100);
+        }
+    }
 
     class Background {
         constructor(game) {
@@ -54,14 +71,17 @@ window.addEventListener('load', function () {
             this.width = width;
             this.height = height;
             this.background = new Background(this);
+            this.ui = new UI(this);
             this.npc = new NPC(this);
         }
         update() {
             this.background.update(backgroundImage);
+            this.ui.update(dialogue);
             this.npc.update(npcSprite);
         }
         draw(context) {
             this.background.draw(context);
+            this.ui.draw(context);
             this.npc.draw(context);
         }
     }
@@ -123,6 +143,7 @@ window.addEventListener('load', function () {
             video.src = '';
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             button.remove();
+            dialogueBox.removeAttribute('hidden');
         };
     }
 
