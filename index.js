@@ -1,6 +1,4 @@
-//if you want to attempt some ts for proj do \@ts-check without backslash, could also be beneficial for post game rewrite.
-
-import { storyevent } from "./storyevent.js";
+import { Game } from "./game.js";
 
 window.addEventListener('load', function () {
 
@@ -10,88 +8,14 @@ window.addEventListener('load', function () {
     canvas.width = 1550;
     canvas.height = 600;
 
-    // --- Asset Loading/Instance variables ---
-    const npcSprite = new Image();
-    const backgroundImage = new Image();
     const dialogueBox = document.getElementById('dialogue-box');
-    const dialogueText = dialogueBox.querySelector('p');
 
-    var dialogue = "Welcome to Kevin RPG 2!";
-    backgroundImage.src = 'assets/vegasstrip.jpg';
+    //Ear sex
+    const earsex = new Audio('assets/KEVIN_RPG_2_THEME.mp3');
+    earsex.loop = true;
 
     // Tracks the active cleanup function for the current screen
     let cleanup;
-
-    // --- Classes and Enums ---
-    //TODO: Create enum for indexes in story array
-    class UI {
-        constructor(game) {
-            this.game = game;
-            this.dialogueText = dialogueText;
-        }
-        update(text) {
-            this.dialogueText.textContent = text;
-        }
-        draw(context) {
-            if (!this.image) return;
-            context.drawImage(this.dialogueBox, 0, 500, this.game.width, 100);
-        }
-    }
-
-    class Background {
-        constructor(game) {
-            this.game = game;
-            this.image = null;
-        }
-        update(image) {
-            this.image = image;
-        }
-        draw(context) {
-            if (!this.image) return;
-            context.drawImage(this.image, 0, 0, this.game.width, this.game.height);
-        }
-    }
-
-    class NPC {
-        constructor(game) {
-            this.game = game;
-            this.width = 200;
-            this.height = 400;
-            // Keep NPC within canvas bounds (x + width <= canvas.width)
-            this.x = 1350;
-            this.y = 200;
-            this.sprite = null;
-            this.story = [new storyevent("init")];
-        }
-        update(sprite) {
-            this.sprite = sprite;
-        }
-        draw(context) {
-            if (!this.sprite) return;
-            context.drawImage(this.sprite, this.x, this.y, this.width, this.height);
-        }
-    }
-
-    class Game {
-        constructor(width, height) {
-            this.width = width;
-            this.height = height;
-            this.background = new Background(this);
-            this.ui = new UI(this);
-            this.npc = new NPC(this);
-            
-        }
-        update() {
-            this.background.update(backgroundImage);
-            this.ui.update(dialogue);
-            this.npc.update(npcSprite);
-        }
-        draw(context) {
-            this.background.draw(context);
-            this.ui.draw(context);
-            this.npc.draw(context);
-        }
-    }
 
     // --- Game Instance ---
     const game = new Game(canvas.width, canvas.height);
@@ -112,13 +36,19 @@ window.addEventListener('load', function () {
         video.src = 'assets/erika-kirk-kirk.mp4';
         video.autoplay = true;
         video.loop = true;
-        video.muted = true;
+        video.muted = false;
 
         // Autoplay may be blocked; retry on first user interaction
         video.play().catch(() => {
             const retry = () => video.play();
             document.addEventListener('mousemove', retry, { once: true });
             document.addEventListener('touchstart', retry, { once: true });
+        });
+
+        //try and paly audio as well
+        earsex.play().catch(() => {
+            const retry = () => { earsex.play(); document.removeEventListener('click', retry); };
+            document.addEventListener('click', retry);
         });
 
         function render() {
@@ -136,7 +66,6 @@ window.addEventListener('load', function () {
             animFrameId = requestAnimationFrame(render);
         }
 
-        // Create and insert the start button
         const button = document.getElementById('start-button');
         button.textContent = 'Start Game';
         button.onclick = () => window.startgame();
@@ -146,6 +75,7 @@ window.addEventListener('load', function () {
 
         return function cleanup() {
             cancelAnimationFrame(animFrameId);
+            earsex.pause();
             video.pause();
             video.src = '';
             ctx.clearRect(0, 0, canvas.width, canvas.height);
